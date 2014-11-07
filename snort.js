@@ -9,12 +9,32 @@ function Snort (conn) {
     ip: /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5})? -> ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5})?/
   };
 
+  // sql statements
+  var sql = {
+    init: 'CREATE TABLE ? ( \
+            id BIGINT NOT NULL AUTO_INCREMENT, \
+            alert_id VARCHAR(256), \
+            description VARCHAR(256), \
+            classification VARCHAR(256), \
+            priority VARCHAR(256), \
+            ttl VARCHAR(256), \
+            src VARCHAR(256), \
+            dest VARCHAR(256), \
+            PRIMARY KEY (id) \
+          );'
+  };
+
   // contents for the next sql statement
   var currentStatement;
 
   // functions
+  this.init = init;
   this.process = process;
 
+  // init table
+  function init (tablename) {
+    console.log(sql.init);
+  }
 
   // process some input
   function process (input) {
