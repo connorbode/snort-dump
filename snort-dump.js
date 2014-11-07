@@ -24,9 +24,12 @@ sequelize
     } else {
       snort = new Snort(sequelize);
       if (process.argv[3]) {
-        init(process.argv[3]);
+        snort
+          .init(db_connection_info.table)
+          .success(run);
+      } else {
+        run();
       }
-      run();
     }
   });
 

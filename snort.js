@@ -11,7 +11,7 @@ function Snort (conn) {
 
   // sql statements
   var sql = {
-    init: 'CREATE TABLE ? ( \
+    init: 'CREATE TABLE :table ( \
             id BIGINT NOT NULL AUTO_INCREMENT, \
             alert_id VARCHAR(256), \
             description VARCHAR(256), \
@@ -33,7 +33,8 @@ function Snort (conn) {
 
   // init table
   function init (tablename) {
-    console.log(sql.init);
+    var s = sql.init.replace(/\:table/, tablename);
+    return conn.query(s, null, { raw: true }, null);
   }
 
   // process some input
