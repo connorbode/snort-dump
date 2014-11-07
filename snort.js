@@ -3,7 +3,8 @@ function Snort (conn) {
 
   // regexs
   var regex = {
-    id: /\[([0-9]+:[0-9]+:[0-9]+)\]/
+
+    id: /\[\*\*\] \[([0-9]+:[0-9]+:[0-9]+)\] ([A-Za-z\- \/]+) \[\*\*\]/
   };
 
   // contents for the next sql statement
@@ -29,7 +30,7 @@ function Snort (conn) {
       executeStatement();
       return;
     }
-    matchID(line);
+    matchIDLine(line);
   }
 
   // checks if a line is a newline
@@ -57,12 +58,16 @@ function Snort (conn) {
   }
 
   // checks the line for an event ID
-  function matchID (line) {
+  // and a classification
+  function matchIDLine (line) {
     var match = regex.id.exec(line);
     if (match) {
       currentStatement.id = match[1];
+      currentStatement.desc = match[2];
     }
   }
+
+  // 
 }
 
 module.exports = Snort;
