@@ -14,10 +14,7 @@ try {
 }
 
 // start db connection
-sequelize = new Sequelize(db_connection_info.db, db_connection_info.username, db_connection_info.password, {
-    dialect: db_connection_info.dialect,
-    port: db_connection_info.port
-  });
+sequelize = new Sequelize(db_connection_info.db, db_connection_info.username, db_connection_info.password, db_connection_info.sequelize);
 
 sequelize
   .authenticate()
