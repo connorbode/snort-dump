@@ -1,5 +1,5 @@
 
-function Snort (conn) {
+function Snort (conn, tablename) {
 
   // regexs
   var regex = {
@@ -11,17 +11,28 @@ function Snort (conn) {
 
   // sql statements
   var sql = {
-    init: 'CREATE TABLE :table ( \
-            id BIGINT NOT NULL AUTO_INCREMENT, \
-            alert_id VARCHAR(256), \
-            description VARCHAR(256), \
-            classification VARCHAR(256), \
-            priority VARCHAR(256), \
-            ttl VARCHAR(256), \
-            src VARCHAR(256), \
-            dest VARCHAR(256), \
-            PRIMARY KEY (id) \
-          );'
+
+    // create teh db
+    init: 
+      'CREATE TABLE ' + tablename + ' ( \
+        id BIGINT NOT NULL AUTO_INCREMENT, \
+        alert_id VARCHAR(256), \
+        description VARCHAR(256), \
+        classification VARCHAR(256), \
+        priority VARCHAR(256), \
+        ttl VARCHAR(256), \
+        src VARCHAR(256), \
+        dest VARCHAR(256), \
+        PRIMARY KEY (id) \
+      );',
+
+    // insert a snort log
+    insert:
+      'INSERT INTO ' + tablename + ' \
+      (alert_id, description, classification, priority, ttl, src, dest) \
+      VALUES \
+      (:id, :desc, :classification, :priority, :ttl, :src, :dest);'
+
   };
 
   // contents for the next sql statement
@@ -32,9 +43,8 @@ function Snort (conn) {
   this.process = process;
 
   // init table
-  function init (tablename) {
-    var s = sql.init.replace(/\:table/, tablename);
-    return conn.query(s, null, { raw: true }, null);
+  function init () {
+    return conn.query(sql.init, null, { raw: true }, null);
   }
 
   // process some input
@@ -79,7 +89,7 @@ function Snort (conn) {
 
   // executes the pending statement
   function executeStatement () {
-    console.log(currentStatement);
+    conn.query(sql.insert, null, { raw: true }, currentStatement);
     resetStatement();
   }
 

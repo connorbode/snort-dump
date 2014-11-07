@@ -22,10 +22,10 @@ sequelize
     if (!!err) {
       console.log("Unable to connect to db");
     } else {
-      snort = new Snort(sequelize);
+      snort = new Snort(sequelize, db_connection_info.table);
       if (process.argv[3]) {
         snort
-          .init(db_connection_info.table)
+          .init()
           .success(function () {
             console.log("db initialized");
           });
@@ -35,11 +35,6 @@ sequelize
     }
   });
 
-
-// init db if necessary
-function init (table) {
-  snort.init(table);
-}
 
 
 // process stdin
