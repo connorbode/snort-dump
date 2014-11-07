@@ -1,0 +1,85 @@
+[**] [1:527:8] BAD-TRAFFIC same SRC/DST [**]
+[Classification: Potentially Bad Traffic] [Priority: 2]
+10/21-13:48:11.139566 :: -> ff02::1:ff76:6bd6
+IPV6-ICMP TTL:255 TOS:0x0 ID:0 IpLen:40 DgmLen:64
+[Xref => http://www.cert.org/advisories/CA-1997-28.html][Xref =>
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=1999-0016][Xref =>
+http://www.securityfocus.com/bid/2666]
+
+[**] [1:527:8] BAD-TRAFFIC same SRC/DST [**]
+[Classification: Potentially Bad Traffic] [Priority: 2]
+10/21-15:15:25.378277 :: -> ff02::16
+IPV6-ICMP TTL:1 TOS:0x0 ID:256 IpLen:40 DgmLen:76
+[Xref => http://www.cert.org/advisories/CA-1997-28.html]
+
+[**] [1:384:5] ICMP PING [**]
+[Classification: Misc activity] [Priority: 3]
+10/21-15:15:25.378323 192.168.192.254 -> 192.168.192.128
+ICMP TTL:16 TOS:0x10 ID:0 IpLen:20 DgmLen:48
+Type:8 Code:0 ID:13312 Seq:0 ECHO
+
+[**] [1:527:8] BAD-TRAFFIC same SRC/DST [**]
+[Classification: Potentially Bad Traffic] [Priority: 2]
+10/21-15:15:26.195015 :: -> ff02::16
+IPV6-ICMP TTL:1 TOS:0x0 ID:256 IpLen:40 DgmLen:76
+
+[**] [1:9419:9] MALWARE-OTHER sasser attempt [**]
+[Classification: A Network Trojan was Detected] [Priority: 1] 
+04/19-23:28:30.172468 98.114.205.102:1828 -> 192.150.11.111:445
+TCP TTL:64 TOS:0x0 ID:1451 IpLen:20 DgmLen:3360 DF
+***A**** Seq: 0x8CFFA9C  Ack: 0x5BD511D9  Win: 0x4470  TcpLen: 20
+[Xref => http://www.securityfocus.com/bid/10108]
+
+[**] [1:2508:17] OS-WINDOWS DCERPC NCACN-IP-TCP lsass DsRolerUpgradeDownlevelServer overflow attempt [**]
+[Classification: Attempted Administrator Privilege Gain] [Priority: 1] 
+04/19-23:28:30.172468 98.114.205.102:1828 -> 192.150.11.111:445
+TCP TTL:64 TOS:0x0 ID:1451 IpLen:20 DgmLen:3360 DF
+***A**** Seq: 0x8CFFA9C  Ack: 0x5BD511D9  Win: 0x4470  TcpLen: 20
+[Xref => http://technet.microsoft.com/en-us/security/bulletin/MS04-011]
+
+
+// get db connection infomartion
+var db_connection_file = process.argv[2];
+var db_connection_info;
+try {
+  db_connection_info = require(db_connection_file);
+} catch (err) {
+  process.stdout.write("Couldn't find the db connection file");
+  process.exit(0);
+}
+
+// start db connection
+var Sequelize = require('sequelize')
+  , sequelize = new Sequelize(db_connection_info.db, db_connection_info.username, db_connection_info.password, {
+      dialect: db_connection_info.dialect,
+      port: db_connection_info.port
+    });
+
+sequelize
+  .authenticate()
+  .complete(function (err) {
+    if (!!err) {
+      console.log("Unable to connect to db");
+    } else {
+      run();
+    }
+  });
+
+
+// process stdin
+process.stdin.setEncoding('utf8');
+process.stdin.on('readable', function () {
+  var chunk = process.stdin.read();
+  if (chunk !== null) {
+    console.log("data: " + chunk);
+  }
+});
+process.stdin.on('end', function () {
+  process.stdout.write('end');
+});module.exports = {
+  db: 'c_bode',
+  username: 'c_bode',
+  password: 'bubblegum',
+  dialect: 'mysql',
+  port: 3306
+};

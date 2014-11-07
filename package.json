@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/connorbode/snort-dump",
   "dependencies": {
+    "mysql": "^2.5.3",
     "sequelize": "^2.0.0-rc2"
   }
 }
