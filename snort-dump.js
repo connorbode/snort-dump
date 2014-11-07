@@ -10,7 +10,7 @@ var db_connection_info;
 try {
   db_connection_info = require(db_connection_file);
 } catch (err) {
-  process.stdout.write("Couldn't find the db connection file");
+  console.log("Couldn't find the db connection file");
   process.exit(0);
 }
 
@@ -26,7 +26,9 @@ sequelize
       if (process.argv[3]) {
         snort
           .init(db_connection_info.table)
-          .success(run);
+          .success(function () {
+            console.log("db initialized");
+          });
       } else {
         run();
       }
