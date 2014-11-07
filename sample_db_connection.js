@@ -1,7 +1,7 @@
 module.exports = {
-  db: 'c_bode',
-  username: 'c_bode',
-  password: 'bubblegum',
+  db: 'snort',
+  username: 'snort',
+  password: 'bacon',
   dialect: 'mysql',
   port: 3306
 };

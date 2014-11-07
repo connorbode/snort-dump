@@ -5,7 +5,8 @@ function Snort (conn) {
   var regex = {
     id: /\[\*\*\] \[([0-9]+:[0-9]+:[0-9]+)\] ([A-Za-z\- \/]+) \[\*\*\]/,
     classification: /\[Classification: ([A-Za-z ]+)\] \[Priority: ([0-9]+)\]/,
-    ttl: /TTL:([0-9]+)/
+    ttl: /TTL:([0-9]+)/,
+    ip: /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5})? -> ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5})?/
   };
 
   // contents for the next sql statement
@@ -34,6 +35,7 @@ function Snort (conn) {
     matchIDLine(line);
     matchClassificationPriority(line);
     matchTTL(line);
+    matchIP(line);
   }
 
   // checks if a line is a newline
@@ -84,6 +86,15 @@ function Snort (conn) {
     var match = regex.ttl.exec(line);
     if (match) {
       currentStatement.ttl = match[1];
+    }
+  }
+
+  // matches ip
+  function matchIP (line) {
+    var match = regex.ip.exec(line);
+    if (match) {
+      currentStatement.src = match[1] || "";
+      currentStatement.dest = match[2] || "";
     }
   }
 }
